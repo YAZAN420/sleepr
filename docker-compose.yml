@@ -9,6 +9,27 @@ services:
       - 3000:3000
     environment:
       - MONGODB_URI=${MONGODB_URI}
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=500
+      - WATCHPACK_POLLING=true
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - db
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: pnpm run start:dev auth
+    ports:
+      - 3001:3001
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=500
+      - WATCHPACK_POLLING=true
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
